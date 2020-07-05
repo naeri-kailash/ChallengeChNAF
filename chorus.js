@@ -3,14 +3,12 @@ require('dotenv').config()
 const v4 = require('uuid').v4
 const request = require('https').request
 const express = require('express')
-const static = express.static
 const bodyParser = require('body-parser')
 
 const clientID = process.env.CLIENT_ID
 const clientSecret = process.env.CLIENT_SECRET
 const app = express()
 
-app.use(static('public'))
 app.use(
     bodyParser.urlencoded({
       extended: true
@@ -23,7 +21,6 @@ module.exports = getAvailableServices
 function getAvailableServices(address) {
     // get chorus specific identifier for given address
     var addressIdentifier = getAddressIdentifier(address)
-
     // retrieve list of available services in area of given address
     var availableServices = queryChorus(addressIdentifier)
     if (availableServices.length > 0) {
@@ -61,10 +58,10 @@ function getAddressIdentifier(address) {
     req.on('error', function(e) {
         console.error('problem with request: ' + e.message)
     })
-    
     req.end()
 
-    return "12345"
+    // dummy response
+    return '12345'
 }
 
 function queryChorus(addressIdentifier) {
@@ -91,12 +88,11 @@ function queryChorus(addressIdentifier) {
             data.push(chunk)
         })
     })
-    req.end()
-      
     req.on('error', function(e) {
         console.error('problem with request: ' + e.message)
     })
+    req.end()
 
+    // dummy response
     return ['Broadband > 20 Mbps (with the right modem and plan)', 'Broadband > 10 Mbps']
 }
-
